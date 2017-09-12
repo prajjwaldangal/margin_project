@@ -8,21 +8,31 @@
 #include <sstream>
 #include <map>
 
-int MAX = 80;
-
 using namespace std;
+
+int MAX = 80;
+string OUT_PATH = "DAT1.txt";
 
 void diff(string f1, string f2);
 
 void margin(string path, int left, int right);
 
 int main() {
+	map <char, bool> myMap; //  period, comma, and parentheses, special chars
+	// myMap.insert(pair<char, bool>('.', true));
+	myMap.insert(pair<char, bool>(',', true));
+	myMap.insert(pair<char, bool>(')', true));
+	myMap.insert(pair<char, bool>('@', true));
+	myMap.insert(pair<char, bool>('!', true));
+	myMap.insert(pair<char, bool>('%', true));
+	myMap.insert(pair<char, bool>('$', true));
+	myMap.insert(pair<char, bool>('&', true));
+	myMap.insert(pair<char, bool>('#', true));
+	myMap.insert(pair<char, bool>('^', true));
+	myMap.insert(pair<char, bool>('*', true));
+	myMap.insert(pair<char, bool>('_', true));
 	string path = "file.txt"; // change to user input
 	int left, right;
-	// cout << "Enter the path to the file" << endl;
-	// getline(cin, line);
-	
-	fstream out("DAT1.txt");
 	cout << "Enter the left and right margins separated by space" << endl;
 	string margins;
 	getline(cin, margins);
@@ -46,20 +56,25 @@ int main() {
 
 void margin(string path, int left, int right) {
 	fstream in(path);
-	fstream out("DAT1.txt");
+	fstream out(OUT_PATH);
 	in >> noskipws;
-	int cc = 0;
 	char c;
+	int cc; // cc: character count
 	while (in >> c) {
+		cc = 0;
 		// output left no. of blanks
-		out << stirng(left, ' ');
+		out << string(left, ' ');
 		cc += left;
 		// output 80-(right+left) no. of blanks
-		while (cc <= 80-right) {
+		while (cc <= 80-right-1) {
 			out << c;
+			cc += 1;
 			in >> c;
 		}
-		
+		out << c;
+		// output right margin
+		out << string(right, ' ');
+		out << '\n';
 	}
 	in.close();
 	out.close();
